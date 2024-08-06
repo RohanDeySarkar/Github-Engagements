@@ -1,3 +1,4 @@
+# IDEA
 # api's
 # top 10 open source repo
 # check their data ...
@@ -7,3 +8,9 @@
 # select db
 # later part.. -> create a mlops solution
 # parts covered in this project -> full stack, data analysis, ml, ci/cd
+
+# --------------------------------------------------------------------------------------------------
+
+
+# flask api's add here
+# to fetch data for a particular publics repo

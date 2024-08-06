@@ -16,3 +16,8 @@ print(repo.get_topics())
 
 # https://pygithub.readthedocs.io/en/stable/examples/Repository.html#get-repository-topics
 
+# number of prs
+# number of contributors
+# lines of codes
+# list of open issues
+#  
