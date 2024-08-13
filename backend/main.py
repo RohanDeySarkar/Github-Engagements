@@ -23,6 +23,8 @@ from firebase_admin import firestore
 
 import config
 
+# Todo
+# fetch dynamically from db diff collection
 list_of_repos = [
     "tensorflow/tensorflow",
     "pytorch/pytorch",
