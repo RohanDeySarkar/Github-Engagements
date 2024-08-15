@@ -36,17 +36,18 @@ function Sidebar() {
         if (!data) return;
 
         data.docs.map(doc => {
-            console.log(doc.id)
+            // console.log(doc.id)
             // console.log(doc.data().repoName)
             // setRepos([...repos, { id: doc.id, name: doc.data().repoName }]);
             setRepos(prevItems => ([...prevItems, { id: doc.id, name: doc.data().repoName }]))
         })
-      }, [data]
-    );
+      }, [data]);
+
     // console.log(repos)
     const menuOptions = (
         <>
             <NewDocumentButton />
+            
             <div className="flex py-4 flex-col space-y-4 md:max-w-36">
                 {repos.length === 0 ? (
                     <h2 className="text-gray-500 font-semibold text-sm">

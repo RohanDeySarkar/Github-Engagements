@@ -14,12 +14,15 @@ interface Props {
 }
 
 function SidebarOption({href, id, name} : Props) {
-    // const [data, loading, error] = useDocumentData(doc)
-    // const pathname = usePathname();
-    // const isActive = 
+    // const [data, loading, error] = useDocumentData(doc(db, "repoNames", id));
+    const pathname = usePathname();
+    const isActive = href.includes(pathname) && pathname !== "/";
+
+    // console.log(data)
+
   return (
-    <Link href={href} className={``}>
-        <p>{name}</p>
+    <Link href={href} className={`relative border p-2 rounded-md ${isActive ? "bg-gray-300 font-bold border-black" : "border-gray-400"}`}>
+        <p className="truncate">{name}</p>
     </Link>
   )
 }
