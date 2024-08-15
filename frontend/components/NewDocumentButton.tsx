@@ -2,7 +2,8 @@
 
 import { useTransition } from "react"
 import { Button } from "./ui/button"
-import { useRouter } from "next/router";
+import { useRouter } from "next/navigation";
+import { createNewDocument } from "@/actions/actions";
 
 function NewDocumentButton() {
   const [isPending, startTransition] = useTransition();
@@ -10,17 +11,17 @@ function NewDocumentButton() {
 
   const handleCreateNewDocument = () => {
     startTransition(async() => {
-      const { docId } = await createNewDocument();
-      router.push(`/doc/${docId}`);
+      const { id } = await createNewDocument("rohanrepo");
+      router.push(`/repo/${id}`);
     })
   }
 
   return (
     <Button 
       onClick={handleCreateNewDocument}
-      disabled={!isPending}
+      disabled={isPending}
     >
-      {isPending ? "Creating.." : "New Document"}
+      {isPending ? "Creating.." : "Add New Repo"}
     </Button>
   )
 }
