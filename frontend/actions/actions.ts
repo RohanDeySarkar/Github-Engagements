@@ -4,6 +4,7 @@ import { adminDb } from "@/firebase-admin";
 import { auth } from "@clerk/nextjs/server"
 import { getFirestore, collection, addDoc } from 'firebase/firestore';
 import { db } from "../firebase"
+import axios from "axios"
 
 export async function createNewDocument(repoName : string) {
     auth().protect();
@@ -38,8 +39,9 @@ export async function createNewDocument(repoName : string) {
     // })
 
     // const userDocRef = collection(db, 'users').doc(sessionClaims?.email!);
+    const res = await axios.post('http://127.0.0.1:5000/reponame?query=tensorflow/tensorflow');
 
-    const docRef = await addDoc(collection(db, `users/${sessionClaims?.email!}/repoNames`), {repoName : repoName });
+    const docRef = await addDoc(collection(db, `users/${sessionClaims?.email!}/repoNames`), res.data);
 
     return { id : docRef.id };
 }

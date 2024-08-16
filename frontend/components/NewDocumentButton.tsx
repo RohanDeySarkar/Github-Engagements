@@ -16,7 +16,7 @@ import {
 } from "@/components/ui/dialog"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
-
+import axios from "axios"
 
 function NewDocumentButton() {
   // const [isPending, startTransition] = useTransition();
@@ -26,12 +26,13 @@ function NewDocumentButton() {
 
   const router = useRouter();
 
-  const handleCreateNewDocument = async() => {
+  const handleCreateNewDocument = async() => {    
     if (name.length > 2){
       const { id } = await createNewDocument(name);
       router.push(`/repo/${id}`);
     }
     setOpen(false);
+    setName("");
 
     // startTransition(async() => {
       
