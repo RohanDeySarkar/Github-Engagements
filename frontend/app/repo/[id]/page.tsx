@@ -12,6 +12,10 @@ interface Language {
   loc: number;
 }
 
+interface Issue {
+  issue: string;
+}
+
 function RepoPage({params : {id}} : {params:{id:string}}) {
   const {user} = useUser();
 
@@ -25,13 +29,14 @@ function RepoPage({params : {id}} : {params:{id:string}}) {
   const [forks, setForks] = useState<number | undefined>()
   const [stars, setStars] = useState<number | undefined>()
   const [languages, setLanguages] = useState<Language[]>([])
+  const [issues, setIssues] = useState<Issue[]>([])
   
   useEffect(() => {
     if (!data) return;
     
     data.docs.map(doc => {
       if(doc.id === id) {
-        // console.log(doc.data())
+        console.log(doc.data())
         const data = doc.data()
         setRepoName(data.repoName)
         sethomepage(data.homepage)
@@ -40,6 +45,7 @@ function RepoPage({params : {id}} : {params:{id:string}}) {
         setForks(data.forks)
         setStars(data.stars)
         setLanguages(data.languages)
+        setIssues(data.latest_open_issues)
       }
     })
   }, [data]);
@@ -47,6 +53,7 @@ function RepoPage({params : {id}} : {params:{id:string}}) {
     <>
       {repoName.length > 2 ? (
         <Dashboard
+          id={id}
           repoName={repoName}
           homepage={homepage}
           description={description}
@@ -54,6 +61,7 @@ function RepoPage({params : {id}} : {params:{id:string}}) {
           forks={forks}
           stars={stars}
           languages={languages}
+          issues={issues}
         />
         
       ):(

@@ -48,24 +48,29 @@ function Sidebar() {
         <>
             <NewDocumentButton />
             
-            <div className="flex py-4 flex-col space-y-4 md:max-w-36">
+            <div className="flex py-4 flex-col space-y-4">
                 {repos.length === 0 ? (
-                    <h2 className="text-gray-500 font-semibold text-sm">
-                        No Repos Found
+                    <h2 className="text-gray-500 text-[25px] tracking-[0.2rem] font-[750]">
+                        No Repos Found !
                     </h2>
                 ):(
                     <>
-                        <h2 className="text-gray-500 font-semibold text-sm">
+                        <h2 className="text-gray-500 text-[25px] tracking-[0.2rem] font-[750]">
                             My Repos
                         </h2>
-                        {repos.map((doc) => (
-                            <SidebarOption 
-                                key={doc.id}
-                                id={doc.id}
-                                name={doc.name}
-                                href={`/repo/${doc.id}`}
-                            />
-                        ))}
+
+                        <div
+                            className="grid items-center justify-center space-y-5"
+                        >
+                            {repos.map((doc) => (
+                                <SidebarOption 
+                                    key={doc.id}
+                                    id={doc.id}
+                                    name={doc.name}
+                                    href={`/repo/${doc.id}`}
+                                />
+                            ))}
+                        </div>
                     </>
                 )}
             </div>
@@ -73,7 +78,7 @@ function Sidebar() {
     )
 
   return (
-    <div className="p-2 md:p-5 bg-gray-200 relative">
+    <div className="p-2 md:p-5 bg-gray-200 relative min-w-[300px]">
         <div className="md:hidden">
             <Sheet>
                 <SheetTrigger>

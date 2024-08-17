@@ -49,25 +49,26 @@ function NewDocumentButton() {
       <Button 
         onClick={() => setOpen(true)}
         disabled={open}
+        className="text-[24px] p-8 w-[300px] tracking-[0.2rem]"
       >
         {open ? "Adding.." : "Add New Repo"}
       </Button>
 
       <Dialog open={open}>
-        <DialogContent className="sm:max-w-[425px]">
+        <DialogContent className="sm:max-w-[525px]">
           <DialogHeader>
-            <DialogTitle>Repository Name</DialogTitle>
-            <DialogDescription>
+            <DialogTitle className="text-[30px]">Repository Name</DialogTitle>
+            <DialogDescription className="text-[24px]">
               Enter the full repo name from github to see visualizations
             </DialogDescription>
           </DialogHeader>
           <div className="grid gap-4 py-4">
             <div className="grid grid-cols-4 items-center gap-4">
               {create ? (
-                <Skeleton className="h-8 w-[380px]" />
+                <Skeleton className="h-8 w-[480px]" />
               ):(
                 <>
-                <Label htmlFor="name" className="text-right">
+                <Label htmlFor="name" className="text-right text-[20px]">
                   Name
                 </Label>
                 <Input
@@ -85,6 +86,7 @@ function NewDocumentButton() {
               type="submit" 
               onClick={handleCreateNewDocument}
               disabled={create}
+              className="text-[20px]"
             >
               {create ? "Creating..." : "Create"}
             </Button>

@@ -18,7 +18,7 @@ class GithubData:
             # print(dir(repo))
 
             count = 0
-            n_latest = 10
+            n_latest = 15
             
             latest_open_issues = []
             open_issues = repo.get_issues(state='open')
@@ -26,7 +26,9 @@ class GithubData:
                 if count == n_latest:
                     count = 0
                     break
-                latest_open_issues.append(issue.title)
+                latest_open_issues.append({
+                    "issue" : issue.title
+                })
                 count += 1
 
             latest_releases = []
@@ -35,7 +37,9 @@ class GithubData:
                 if count == n_latest:
                     count = 0
                     break 
-                latest_releases.append(release.title)
+                latest_releases.append({
+                    "release" : release.title
+                })
                 count += 1
 
             languages = []
