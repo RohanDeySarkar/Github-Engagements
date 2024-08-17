@@ -7,6 +7,11 @@ import { useEffect, useState } from "react"
 import Dashboard from "@/components/Dashboard";
 import { Skeleton } from "@/components/ui/skeleton"
 
+interface Language {
+  language: string;
+  loc: number;
+}
+
 function RepoPage({params : {id}} : {params:{id:string}}) {
   const {user} = useUser();
 
@@ -19,13 +24,14 @@ function RepoPage({params : {id}} : {params:{id:string}}) {
   const [createdAt, setCreatedAt] = useState<string>("")
   const [forks, setForks] = useState<number | undefined>()
   const [stars, setStars] = useState<number | undefined>()
+  const [languages, setLanguages] = useState<Language[]>([])
   
   useEffect(() => {
     if (!data) return;
-    console.log("DATA IS HERE")
+    
     data.docs.map(doc => {
-      // console.log(doc.id === id)
       if(doc.id === id) {
+        // console.log(doc.data())
         const data = doc.data()
         setRepoName(data.repoName)
         sethomepage(data.homepage)
@@ -33,6 +39,7 @@ function RepoPage({params : {id}} : {params:{id:string}}) {
         setCreatedAt(data.created_at)
         setForks(data.forks)
         setStars(data.stars)
+        setLanguages(data.languages)
       }
     })
   }, [data]);
@@ -46,6 +53,7 @@ function RepoPage({params : {id}} : {params:{id:string}}) {
           createdAt={createdAt}
           forks={forks}
           stars={stars}
+          languages={languages}
         />
         
       ):(
