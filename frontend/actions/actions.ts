@@ -39,9 +39,9 @@ export async function createNewDocument(repoName : string) {
     // })
 
     // const userDocRef = collection(db, 'users').doc(sessionClaims?.email!);
-    const res = await axios.post('http://127.0.0.1:5000/reponame?query=tensorflow/tensorflow');
+    const res = await axios.post(`http://127.0.0.1:5000/reponame?query=${repoName}`);
 
-    const docRef = await addDoc(collection(db, `users/${sessionClaims?.email!}/repoNames`), res.data);
+    const docRef = await addDoc(collection(db, `users/${sessionClaims?.email!}/repos`), res.data);
 
     return { id : docRef.id };
 }

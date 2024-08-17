@@ -48,7 +48,7 @@ class GithubData:
 
             temp_data = {
                 "repoName" : repo.name,
-                "description:": repo.description,
+                "description": repo.description,
                 "stars" : repo.stargazers_count,
                 "forks" : repo.forks_count,
                 "created_at" : repo.created_at,

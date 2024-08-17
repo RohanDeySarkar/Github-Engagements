@@ -4,27 +4,64 @@ import { collectionGroup, collection, query, getDocs, getFirestore } from "fireb
 import {useCollection} from "react-firebase-hooks/firestore"
 import { db } from "../../../firebase";
 import { useEffect, useState } from "react"
+import Dashboard from "@/components/Dashboard";
+import { Skeleton } from "@/components/ui/skeleton"
 
 function RepoPage({params : {id}} : {params:{id:string}}) {
   const {user} = useUser();
 
-  const [data, loading, error] = useCollection(query(collection(db, `users/${user?.emailAddresses}/repoNames`)))
-
+  const [data, loading, error] = useCollection(query(collection(db, `users/${user?.emailAddresses}/repos`)))
+  
+  // multiple [state, setState] = useState() for data fields
+  const [repoName, setRepoName] = useState<string>("")
+  const [homepage, sethomepage] = useState<string>("")
+  const [description, setDescription] = useState<string>("")
+  const [createdAt, setCreatedAt] = useState<string>("")
+  const [forks, setForks] = useState<number | undefined>()
+  const [stars, setStars] = useState<number | undefined>()
+  
   useEffect(() => {
     if (!data) return;
     console.log("DATA IS HERE")
     data.docs.map(doc => {
-        console.log(doc.data())
-        // filter by id === doc.id
+      // console.log(doc.id === id)
+      if(doc.id === id) {
+        const data = doc.data()
+        setRepoName(data.repoName)
+        sethomepage(data.homepage)
+        setDescription(data.description)
+        setCreatedAt(data.created_at)
+        setForks(data.forks)
+        setStars(data.stars)
+      }
     })
   }, [data]);
-  
     return (
-    <div className="flex flex-col flex-1 min-h-screen">
-      RepoPage: {id}
-      {/* fetch repo based on id and create graphs */}
-      {/* fetch data from user/useremai/github_repos/{id} and plot */}
-    </div>
+    <>
+      {repoName.length > 2 ? (
+        <Dashboard
+          repoName={repoName}
+          homepage={homepage}
+          description={description}
+          createdAt={createdAt}
+          forks={forks}
+          stars={stars}
+        />
+        
+      ):(
+        <div className="flex flex-col items-center justify-center flex-1 min-h-screen">
+          <div className="space-y-2">
+          <Skeleton className="h-[200px] w-[400px] md:h-[425px] md:w-[550px] rounded-xl bg-slate-200" />
+
+          <div className="space-y-2">
+            <Skeleton className="h-4 w-[250px] md:w-[450px] bg-slate-200" />
+            <Skeleton className="h-4 w-[150px] md:w-[350px] bg-slate-200" />
+            <Skeleton className="h-4 w-[100px] md:w-[250px] bg-slate-200" />
+          </div>
+          </div>
+        </div>
+      )}
+    </>
   )
 }
 export default RepoPage

@@ -30,7 +30,7 @@ function Sidebar() {
     const {user} = useUser();
 
     // data missing
-    const [data, loading, error] = useCollection(query(collection(db, `users/${user?.emailAddresses}/repoNames`)));
+    const [data, loading, error] = useCollection(query(collection(db, `users/${user?.emailAddresses}/repos`)));
     
     useEffect(() => {
         if (!data) return;

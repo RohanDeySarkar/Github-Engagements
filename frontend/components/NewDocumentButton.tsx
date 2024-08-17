@@ -16,23 +16,26 @@ import {
 } from "@/components/ui/dialog"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
-import axios from "axios"
+import { Skeleton } from "@/components/ui/skeleton"
 
 function NewDocumentButton() {
   // const [isPending, startTransition] = useTransition();
 
   const [open, setOpen] = useState<boolean>(false);
+  const [create, setCreate] = useState<boolean>(false);
   const [name, setName] = useState<string>("");
 
   const router = useRouter();
 
   const handleCreateNewDocument = async() => {    
+    setCreate(true)
     if (name.length > 2){
       const { id } = await createNewDocument(name);
       router.push(`/repo/${id}`);
     }
     setOpen(false);
     setName("");
+    setCreate(false);
 
     // startTransition(async() => {
       
@@ -47,7 +50,7 @@ function NewDocumentButton() {
         onClick={() => setOpen(true)}
         disabled={open}
       >
-        {open ? "Creating.." : "Add New Repo"}
+        {open ? "Adding.." : "Add New Repo"}
       </Button>
 
       <Dialog open={open}>
@@ -60,18 +63,31 @@ function NewDocumentButton() {
           </DialogHeader>
           <div className="grid gap-4 py-4">
             <div className="grid grid-cols-4 items-center gap-4">
-              <Label htmlFor="name" className="text-right">
-                Name
-              </Label>
-              <Input
-                id={name}
-                defaultValue={name}
-                onChange={(e) => setName(e.target.value)}
-                className="col-span-3"
-              />
+              {create ? (
+                <Skeleton className="h-8 w-[380px]" />
+              ):(
+                <>
+                <Label htmlFor="name" className="text-right">
+                  Name
+                </Label>
+                <Input
+                  id={name}
+                  defaultValue={name}
+                  onChange={(e) => setName(e.target.value)}
+                  className="col-span-3"
+                />
+                </>
+              )}
             </div>
           </div>
-            <Button type="submit" onClick={handleCreateNewDocument}>Enter</Button>
+          
+            <Button 
+              type="submit" 
+              onClick={handleCreateNewDocument}
+              disabled={create}
+            >
+              {create ? "Creating..." : "Create"}
+            </Button>
         </DialogContent>
       </Dialog>
     </div>

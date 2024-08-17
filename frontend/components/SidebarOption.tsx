@@ -22,7 +22,7 @@ function SidebarOption({href, id, name} : Props) {
 
   return (
     <Link href={href} className={`relative border p-2 rounded-md ${isActive ? "bg-gray-300 font-bold border-black" : "border-gray-400"}`}>
-        <p className="truncate">{name}</p>
+        <p className="truncate capitalize">{name}</p>
     </Link>
   )
 }
