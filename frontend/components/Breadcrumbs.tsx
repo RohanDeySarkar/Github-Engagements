@@ -17,7 +17,7 @@ function Breadcrumbs() {
     const segments = path.split("/");
     
   return (
-    <Breadcrumb className=" w-[50%] grid mr-[30px]"> 
+    <Breadcrumb className=" w-[50%] grid text-center"> 
         <BreadcrumbList className="tracking-[0.1rem] text-[25px]">
             <BreadcrumbItem>
                 <BreadcrumbLink href="/">Home</BreadcrumbLink>

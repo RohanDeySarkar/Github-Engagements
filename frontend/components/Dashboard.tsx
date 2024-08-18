@@ -19,7 +19,10 @@ import {
   CalendarDays,
   GitFork,
   Star,
-  MinusIcon
+  UsersIcon,
+  CircleDot,
+  TagIcon,
+  UserIcon
 } from "lucide-react";
 import { Progress } from "@/components/ui/progress"
 import { useEffect, useState } from "react";
@@ -37,6 +40,8 @@ interface Language {
 
 interface Issue {
   issue: string;
+  href: string;
+  user: string;
 }
 
 interface Props {
@@ -44,28 +49,31 @@ interface Props {
   repoName: string;
   homepage: string;
   description: string;
-  createdAt: string;
+  updatedAt: string;
   forks: number | undefined;
   stars: number | undefined;
   languages: Language[];
   issues: Issue[];
+  contributors: number | undefined;
+  latestRelease: string;
 }
 
 interface CalculatePercentage {
   (num: number): number | undefined;
 }
 
-
 function Dashboard({
     id,
     repoName, 
     homepage, 
     description,
-    createdAt,
+    updatedAt,
     forks,
     stars,
     languages,
-    issues
+    issues,
+    contributors,
+    latestRelease
 } : Props) {
 
   // console.log(languages)
@@ -136,17 +144,35 @@ function Dashboard({
         </div>
 
         <div className="flex items-center border border-gray-400 p-4 rounded-md">
+          <UsersIcon className="mr-4 size-[45px]" />
+
+          <h1 className="tracking-[0.2rem] text-[25px] font-[550]">
+            {contributors}
+          </h1>
+        </div>
+
+        <div className="flex items-center border border-gray-400 p-4 rounded-md">
+          <TagIcon className="mr-4 size-[45px]" />
+
+          <h1 className="tracking-[0.2rem] text-[25px] font-[550] truncate max-w-screen-md">
+            {latestRelease}
+          </h1>
+        </div>
+
+        <div className="flex items-center border border-gray-400 p-4 rounded-md">
           <CalendarDays className="mr-4 size-[45px]" />
 
           <h1 className="tracking-[0.2rem] text-[25px] font-[550]">
-            {createdAt}
+            {updatedAt}
           </h1>
         </div>
       </div>
 
       <div className="flex space-x-2 justify-evenly">
-        <div className="space-y-2 grid items-center border border-gray-400 p-3 rounded-xl flex-[0.5]">
-          <h1 className="text-center tracking-[0.2rem] text-[25px] font-[550]">Languages Used</h1>
+        <div className="space-y-10 flex flex-col border border-gray-400 rounded-xl flex-[0.5] p-1">
+          <h1 className="text-center tracking-[0.2rem] text-[25px] font-[550] mt-10">
+            Languages Used
+          </h1>
 
           <div className="flex items-center flex-wrap w-full">
             {languages.map(item => {
@@ -155,7 +181,7 @@ function Dashboard({
                 progressValue = progressValue + 8
               }
               return (
-                <div className="border border-gray-300 p-3 rounded-xl m-2 min-w-[180px]">
+                <div className="border border-gray-300 p-3 rounded-xl m-2 min-w-[180px] odd:bg-gray-100 even:bg-gray-200">
                   <p className="tracking-[0.1rem] text-[15px] font-[550]">{item.language}</p>
                   <Progress value={progressValue} className="w-[100%] border" />
                 </div>
@@ -165,23 +191,28 @@ function Dashboard({
         </div>
 
         <div className="space-y-2 border border-gray-400 p-3 rounded-xl flex-[0.4]">
-          <h1 className="capitalize text-center tracking-[0.2rem] text-[25px] font-[550]">top open issues</h1>
+          <h1 className="capitalize text-center tracking-[0.2rem] text-[25px] font-[550]">latest open PR's</h1>
 
           <div className="space-y-2">
             {issues.map(item => (
-              <div className="flex items-center">
-                <MinusIcon className=""/>
-                <p className="tracking-[0.1rem] text-[15px] font-[550] ml-2">
-                  {item.issue}
-                </p>
-              </div>
+              <Link href={item.href} className="flex items-center justify-between odd:bg-gray-100 even:bg-gray-200 p-1 hover:opacity-60">
+                <div className="flex items-center">
+                  <CircleDot className="mr-2 size-[25px]"/>
+                  
+                  <p className="tracking-[0.1rem] text-[15px] font-[550] ml-2 truncate max-w-[600px]">
+                    {item.issue}
+                  </p>
+                </div>
+
+                <div className="flex items-center justify-start w-[200px]">
+                  <UserIcon className="mr-2 size-[25px]" />
+
+                  <p>{item.user}</p>
+                </div>
+                </Link>
             ))}
           </div>
         </div>
-      </div>
-
-      <div>
-        {/* releases */}
       </div>
 
       {/* <Button 

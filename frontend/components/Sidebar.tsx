@@ -35,6 +35,9 @@ function Sidebar() {
     useEffect(() => {
         if (!data) return;
 
+        // temp array store repos
+        // then set once all fetched
+
         data.docs.map(doc => {
             // console.log(doc.id)
             // console.log(doc.data().repoName)

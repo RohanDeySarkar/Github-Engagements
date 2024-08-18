@@ -14,6 +14,8 @@ interface Language {
 
 interface Issue {
   issue: string;
+  href : string;
+  user: string;
 }
 
 function RepoPage({params : {id}} : {params:{id:string}}) {
@@ -25,11 +27,13 @@ function RepoPage({params : {id}} : {params:{id:string}}) {
   const [repoName, setRepoName] = useState<string>("")
   const [homepage, sethomepage] = useState<string>("")
   const [description, setDescription] = useState<string>("")
-  const [createdAt, setCreatedAt] = useState<string>("")
+  const [updatedAt, setupdatedAt] = useState<string>("")
   const [forks, setForks] = useState<number | undefined>()
   const [stars, setStars] = useState<number | undefined>()
   const [languages, setLanguages] = useState<Language[]>([])
   const [issues, setIssues] = useState<Issue[]>([])
+  const [contributors, setContributors] = useState<number | undefined>()
+  const [latestRelease, setLatestRelease] = useState<string>("")
   
   useEffect(() => {
     if (!data) return;
@@ -41,11 +45,13 @@ function RepoPage({params : {id}} : {params:{id:string}}) {
         setRepoName(data.repoName)
         sethomepage(data.homepage)
         setDescription(data.description)
-        setCreatedAt(data.created_at)
+        setupdatedAt(data.updated_at)
         setForks(data.forks)
         setStars(data.stars)
         setLanguages(data.languages)
         setIssues(data.latest_open_issues)
+        setContributors(data.contributors)
+        setLatestRelease(data.latest_release)
       }
     })
   }, [data]);
@@ -57,11 +63,13 @@ function RepoPage({params : {id}} : {params:{id:string}}) {
           repoName={repoName}
           homepage={homepage}
           description={description}
-          createdAt={createdAt}
+          updatedAt={updatedAt}
           forks={forks}
           stars={stars}
           languages={languages}
           issues={issues}
+          contributors={contributors}
+          latestRelease={latestRelease}
         />
         
       ):(

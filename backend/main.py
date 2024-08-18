@@ -18,7 +18,7 @@ class GithubData:
             # print(dir(repo))
 
             count = 0
-            n_latest = 15
+            n_latest = 12
             
             latest_open_issues = []
             open_issues = repo.get_issues(state='open')
@@ -27,17 +27,19 @@ class GithubData:
                     count = 0
                     break
                 latest_open_issues.append({
-                    "issue" : issue.title
+                    "issue" : issue.title,
+                    "user" : issue.user.login,
+                    "href" : f'https://github.com/{repository}/pull/{issue.number}'
                 })
                 count += 1
 
-            latest_releases = []
+            last_releases = []
             releases = repo.get_releases()
             for release in releases:
                 if count == n_latest:
                     count = 0
                     break 
-                latest_releases.append({
+                last_releases.append({
                     "release" : release.title
                 })
                 count += 1
@@ -50,6 +52,18 @@ class GithubData:
                     "loc" : repo_languages[language]
                 })
 
+            contributors = 0
+            page = 1
+            not_empty = True
+            while not_empty:
+                curr_page = repo.get_contributors(anon=True).get_page(page)
+                if len(curr_page) == 0:
+                    not_empty = False
+                    break
+                for item in curr_page:
+                    contributors += 1
+                page += 1
+
             temp_data = {
                 "repoName" : repo.name,
                 "description": repo.description,
@@ -59,8 +73,10 @@ class GithubData:
                 "updated_at" : repo.updated_at,
                 "homepage" : repo.homepage,
                 "latest_open_issues" : latest_open_issues,
-                "latest_releases" : latest_releases,
-                "languages" : languages
+                "releases" : last_releases,
+                "languages" : languages,
+                "contributors" : contributors,
+                "latest_release" : last_releases[0]["release"],
             }
             return temp_data
         except:
