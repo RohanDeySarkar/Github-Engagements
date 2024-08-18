@@ -18,6 +18,16 @@ interface Issue {
   user: string;
 }
 
+interface Commit {
+  commits: number;
+  date: string;
+}
+
+interface TopContributor {
+  author: string;
+  commits: number;
+}
+
 function RepoPage({params : {id}} : {params:{id:string}}) {
   const {user} = useUser();
 
@@ -34,6 +44,8 @@ function RepoPage({params : {id}} : {params:{id:string}}) {
   const [issues, setIssues] = useState<Issue[]>([])
   const [contributors, setContributors] = useState<number | undefined>()
   const [latestRelease, setLatestRelease] = useState<string>("")
+  const [commitsPerDay, setCommitsPerDay] = useState<Commit[]>([])
+  const [topContributors, setTopContributors] = useState<TopContributor[]>([])
   
   useEffect(() => {
     if (!data) return;
@@ -52,6 +64,8 @@ function RepoPage({params : {id}} : {params:{id:string}}) {
         setIssues(data.latest_open_issues)
         setContributors(data.contributors)
         setLatestRelease(data.latest_release)
+        setCommitsPerDay(data.commits_per_day)
+        setTopContributors(data.top_contributors)
       }
     })
   }, [data]);
@@ -70,6 +84,8 @@ function RepoPage({params : {id}} : {params:{id:string}}) {
           issues={issues}
           contributors={contributors}
           latestRelease={latestRelease}
+          commitsPerDay={commitsPerDay}
+          topContributors={topContributors}
         />
         
       ):(

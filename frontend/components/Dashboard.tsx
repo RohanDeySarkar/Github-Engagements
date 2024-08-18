@@ -20,7 +20,7 @@ import {
   GitFork,
   Star,
   UsersIcon,
-  CircleDot,
+  GitPullRequestArrowIcon,
   TagIcon,
   UserIcon
 } from "lucide-react";
@@ -31,6 +31,21 @@ import { db } from "../firebase";
 import { useUser } from "@clerk/nextjs"
 import { useRouter } from "next/navigation";
 import { Button } from "./ui/button";
+import { Bar, BarChart, CartesianGrid, XAxis } from "recharts"
+ 
+import {
+  ChartConfig,
+  ChartContainer,
+  ChartTooltip,
+  ChartTooltipContent,
+} from "@/components/ui/chart"
+
+const chartConfig = {
+  commits: {
+    label: "Commits",
+    color: "#b9b9b9",
+  },
+} satisfies ChartConfig
 
 
 interface Language {
@@ -42,6 +57,16 @@ interface Issue {
   issue: string;
   href: string;
   user: string;
+}
+
+interface Commit {
+  commits: number;
+  date: string;
+}
+
+interface TopContributor {
+  author: string;
+  commits: number;
 }
 
 interface Props {
@@ -56,6 +81,8 @@ interface Props {
   issues: Issue[];
   contributors: number | undefined;
   latestRelease: string;
+  commitsPerDay: Commit[];
+  topContributors: TopContributor[];
 }
 
 interface CalculatePercentage {
@@ -73,10 +100,10 @@ function Dashboard({
     languages,
     issues,
     contributors,
-    latestRelease
+    latestRelease,
+    commitsPerDay,
+    topContributors
 } : Props) {
-
-  // console.log(languages)
 
   const [total, setTotal] = useState<number | undefined>();
 
@@ -154,7 +181,7 @@ function Dashboard({
         <div className="flex items-center border border-gray-400 p-4 rounded-md">
           <TagIcon className="mr-4 size-[45px]" />
 
-          <h1 className="tracking-[0.2rem] text-[25px] font-[550] truncate max-w-screen-md">
+          <h1 className="tracking-[0.2rem] text-[25px] font-[550] truncate max-w-[350px]">
             {latestRelease}
           </h1>
         </div>
@@ -197,7 +224,7 @@ function Dashboard({
             {issues.map(item => (
               <Link href={item.href} className="flex items-center justify-between odd:bg-gray-100 even:bg-gray-200 p-1 hover:opacity-60">
                 <div className="flex items-center">
-                  <CircleDot className="mr-2 size-[25px]"/>
+                  <GitPullRequestArrowIcon className="mr-2 size-[25px]"/>
                   
                   <p className="tracking-[0.1rem] text-[15px] font-[550] ml-2 truncate max-w-[600px]">
                     {item.issue}
@@ -215,12 +242,49 @@ function Dashboard({
         </div>
       </div>
 
-      {/* <Button 
-        onClick={deleteRepo}
-        className="text-[24px] p-8 w-[300px] tracking-[0.2rem]"
-      >
-        Delete
-      </Button> */}
+      <div className="flex items-center justify-evenly space-x-2 w-full">
+        <div className="border border-gray-400 p-4 rounded-md">
+          <h1 className="text-center tracking-[0.2rem] text-[25px] font-[550] capitalize">
+            Number of commits for last {commitsPerDay.length} days
+          </h1>
+
+          <ChartContainer config={chartConfig} className="min-h-[500px] w-full">
+            <BarChart accessibilityLayer data={commitsPerDay}>
+              <CartesianGrid vertical={false} />
+              <XAxis
+                dataKey="date"
+                tickLine={false}
+                tickMargin={10}
+                axisLine={false}
+              />
+              <ChartTooltip content={<ChartTooltipContent />} />
+              <Bar dataKey="commits" fill="var(--color-commits)" radius={4} />
+            </BarChart>
+          </ChartContainer>
+        </div>
+        
+        <div className="border border-gray-400 p-4 rounded-md">
+          <h1 className="text-center tracking-[0.2rem] text-[25px] font-[550] capitalize">
+            Top {topContributors.length} contributors
+          </h1>
+          
+          <ChartContainer config={chartConfig} className="min-h-[500px] w-full">
+            <BarChart accessibilityLayer data={topContributors}>
+              <CartesianGrid vertical={false} />
+              <XAxis
+                dataKey="author"
+                tickLine={false}
+                tickMargin={10}
+                axisLine={false}
+                // angle={45}
+
+              />
+              <ChartTooltip content={<ChartTooltipContent />} />
+              <Bar dataKey="commits" fill="var(--color-commits)" radius={4} />
+            </BarChart>
+          </ChartContainer>
+        </div>
+      </div>
 
       <AlertDialog>
             <AlertDialogTrigger>

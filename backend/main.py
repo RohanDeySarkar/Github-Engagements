@@ -17,9 +17,9 @@ class GithubData:
             repo = self.g.get_repo(repository)
             # print(dir(repo))
 
+            # PR's
             count = 0
             n_latest = 12
-            
             latest_open_issues = []
             open_issues = repo.get_issues(state='open')
             for issue in open_issues:
@@ -33,6 +33,7 @@ class GithubData:
                 })
                 count += 1
 
+            # Releases
             last_releases = []
             releases = repo.get_releases()
             for release in releases:
@@ -44,6 +45,7 @@ class GithubData:
                 })
                 count += 1
 
+            # Languages
             languages = []
             repo_languages = repo.get_languages()
             for language in repo_languages:
@@ -52,8 +54,9 @@ class GithubData:
                     "loc" : repo_languages[language]
                 })
 
+            # Contributors
             contributors = 0
-            page = 1
+            page = 0
             not_empty = True
             while not_empty:
                 curr_page = repo.get_contributors(anon=True).get_page(page)
@@ -63,6 +66,59 @@ class GithubData:
                 for item in curr_page:
                     contributors += 1
                 page += 1
+
+            # Commits
+            commits_data = []
+            page = 0
+            pages_to_fetch = 25
+            while page < 25:
+                curr_page = repo.get_commits().get_page(page)
+                for item in curr_page:
+                    try:
+                        commits_data.append({
+                            "author" : item.author.login,
+                            "date" : str(item.last_modified_datetime.date())
+                        })
+                    except:
+                        continue
+                page += 1
+
+            commits_per_day = {}
+            for data in commits_data:
+                date = data["date"]
+                if date not in commits_per_day:
+                    commits_per_day[date] = 1
+                else:
+                    commits_per_day[date] += 1
+
+            commits_per_day_list = []
+            for commit_date in commits_per_day:
+                commits_per_day_list.append({
+                    "date" : commit_date,
+                    "commits" : commits_per_day[commit_date]
+                })
+
+            # Contributors
+            top_contributors = {}
+            for data in commits_data:
+                author = data["author"]
+                if author not in top_contributors:
+                    top_contributors[author] = 1
+                else:
+                    top_contributors[author] += 1
+            top_contributors = dict(sorted(top_contributors.items(), key=lambda item: item[1], reverse=True))
+
+            top_contributors_list = []
+            top_n_contributors = 10
+            curr_count = 0
+            for contributor in top_contributors:
+                if curr_count == top_n_contributors:
+                    break
+                top_contributors_list.append({
+                    "author" : contributor,
+                    "commits" : top_contributors[contributor]
+                })
+                curr_count += 1
 
             temp_data = {
                 "repoName" : repo.name,
@@ -77,6 +133,8 @@ class GithubData:
                 "languages" : languages,
                 "contributors" : contributors,
                 "latest_release" : last_releases[0]["release"],
+                "commits_per_day" : commits_per_day_list,
+                "top_contributors" : top_contributors_list
             }
             return temp_data
         except:
