@@ -51,7 +51,7 @@ function RepoPage({params : {id}} : {params:{id:string}}) {
   const [latestRelease, setLatestRelease] = useState<string>("")
   const [commitsPerDay, setCommitsPerDay] = useState<Commit[]>([])
   const [topContributors, setTopContributors] = useState<TopContributor[]>([])
-  const [topicInterests, setTopicInterests] = useState<[TopicInterest][]>([])
+  const [topicInterests, setTopicInterests] = useState<TopicInterest[]>([])
   
   useEffect(() => {
     if (!data) return;
@@ -95,17 +95,25 @@ function RepoPage({params : {id}} : {params:{id:string}}) {
           topContributors={topContributors}
           topicInterests={topicInterests}
         />
-        
       ):(
-        <div className="flex flex-col items-center justify-center flex-1 min-h-screen">
-          <div className="space-y-2">
-          <Skeleton className="h-[200px] w-[400px] md:h-[425px] md:w-[550px] rounded-xl bg-slate-200" />
-
-          <div className="space-y-2">
-            <Skeleton className="h-4 w-[250px] md:w-[450px] bg-slate-200" />
-            <Skeleton className="h-4 w-[150px] md:w-[350px] bg-slate-200" />
-            <Skeleton className="h-4 w-[100px] md:w-[250px] bg-slate-200" />
+        <div className="flex flex-col items-center space-y-5">
+          <div className="p-2 space-y-2 space-x-5 flex items-center justify-evenly w-full">
+            <Skeleton className="h-[200px] w-[400px] md:h-[150px] md:w-[70%] rounded-xl bg-slate-200" />
           </div>
+          <div className="p-2 space-y-2 space-x-5 flex items-center justify-evenly w-full">
+            <Skeleton className="h-[200px] w-[400px] md:h-[150px] md:w-[50%] rounded-xl bg-slate-200" />
+            <Skeleton className="h-[200px] w-[400px] md:h-[150px] md:w-[50%] rounded-xl bg-slate-200" />
+          </div>
+          <div className="p-2 space-y-2 space-x-5 flex items-center justify-evenly w-full">
+            <Skeleton className="h-[200px] w-[400px] md:h-[100px] md:w-[20%] rounded-xl bg-slate-200" />
+            <Skeleton className="h-[200px] w-[400px] md:h-[100px] md:w-[20%] rounded-xl bg-slate-200" />
+            <Skeleton className="h-[200px] w-[400px] md:h-[100px] md:w-[20%] rounded-xl bg-slate-200" />
+            <Skeleton className="h-[200px] w-[400px] md:h-[100px] md:w-[20%] rounded-xl bg-slate-200" />
+            <Skeleton className="h-[200px] w-[400px] md:h-[100px] md:w-[20%] rounded-xl bg-slate-200" />
+          </div>
+          <div className="p-2 space-y-2 space-x-5 flex items-center justify-evenly w-full">
+            <Skeleton className="h-[200px] w-[400px] md:h-[600px] md:w-[50%] rounded-xl bg-slate-200" />
+            <Skeleton className="h-[200px] w-[400px] md:h-[600px] md:w-[50%] rounded-xl bg-slate-200" />
           </div>
         </div>
       )}

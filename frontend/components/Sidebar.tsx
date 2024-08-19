@@ -37,6 +37,7 @@ function Sidebar() {
 
         // temp array store repos
         // then set once all fetched
+        setRepos([])
 
         data.docs.map(doc => {
             // console.log(doc.id)

@@ -41,7 +41,6 @@ import {
 } from "@/components/ui/chart"
 
 import { AreaChart, type EventProps } from '@tremor/react'
-import { LineChart } from '@tremor/react'
 
 const chartConfig = {
   commits: {
@@ -302,24 +301,17 @@ function Dashboard({
 
       <div className="space-y-10 flex flex-col border border-gray-400 rounded-xl p-4 min-w-[50%] h-[30%]">
         <h1 className="text-center tracking-[0.2rem] text-[25px] font-[550] capitalize">
-          Popularity of topic {repoName} for last {topicInterests.length} days
+          Interest over time for last {topicInterests.length} days
         </h1>
 
         <AreaChart
+          className='mt-4 h-80'
           data={topicInterests}
           index="date"
           categories={['popularity']}
           onValueChange={(v: EventProps) => setValue(v)}
           // colors={["red"]}
         />
-        
-        {/* <LineChart
-        data={topicInterests}
-        index="date"
-        categories={['popularity']}
-        colors={['red']}
-        onValueChange={(v: EventProps) => setValue(v)}
-      /> */}
 
       </div>
 
