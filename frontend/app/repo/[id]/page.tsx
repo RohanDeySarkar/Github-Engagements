@@ -28,6 +28,11 @@ interface TopContributor {
   commits: number;
 }
 
+interface TopicInterest {
+  date: string;
+  popularity: number;
+}
+
 function RepoPage({params : {id}} : {params:{id:string}}) {
   const {user} = useUser();
 
@@ -46,6 +51,7 @@ function RepoPage({params : {id}} : {params:{id:string}}) {
   const [latestRelease, setLatestRelease] = useState<string>("")
   const [commitsPerDay, setCommitsPerDay] = useState<Commit[]>([])
   const [topContributors, setTopContributors] = useState<TopContributor[]>([])
+  const [topicInterests, setTopicInterests] = useState<[TopicInterest][]>([])
   
   useEffect(() => {
     if (!data) return;
@@ -66,6 +72,7 @@ function RepoPage({params : {id}} : {params:{id:string}}) {
         setLatestRelease(data.latest_release)
         setCommitsPerDay(data.commits_per_day)
         setTopContributors(data.top_contributors)
+        setTopicInterests(data.topic_interest)
       }
     })
   }, [data]);
@@ -86,6 +93,7 @@ function RepoPage({params : {id}} : {params:{id:string}}) {
           latestRelease={latestRelease}
           commitsPerDay={commitsPerDay}
           topContributors={topContributors}
+          topicInterests={topicInterests}
         />
         
       ):(

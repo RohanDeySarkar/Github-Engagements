@@ -32,13 +32,16 @@ import { useUser } from "@clerk/nextjs"
 import { useRouter } from "next/navigation";
 import { Button } from "./ui/button";
 import { Bar, BarChart, CartesianGrid, XAxis } from "recharts"
- 
+
 import {
   ChartConfig,
   ChartContainer,
   ChartTooltip,
   ChartTooltipContent,
 } from "@/components/ui/chart"
+
+import { AreaChart, type EventProps } from '@tremor/react'
+import { LineChart } from '@tremor/react'
 
 const chartConfig = {
   commits: {
@@ -69,6 +72,11 @@ interface TopContributor {
   commits: number;
 }
 
+interface TopicInterest {
+  date: string;
+  popularity: number;
+}
+
 interface Props {
   id: string;
   repoName: string;
@@ -83,6 +91,7 @@ interface Props {
   latestRelease: string;
   commitsPerDay: Commit[];
   topContributors: TopContributor[];
+  topicInterests: TopicInterest[];
 }
 
 interface CalculatePercentage {
@@ -102,10 +111,13 @@ function Dashboard({
     contributors,
     latestRelease,
     commitsPerDay,
-    topContributors
+    topContributors,
+    topicInterests
 } : Props) {
 
   const [total, setTotal] = useState<number | undefined>();
+
+  const [value, setValue] = useState<null | EventProps>(null)
 
   const {user} = useUser();
   const router = useRouter();
@@ -136,7 +148,7 @@ function Dashboard({
       </h1>
 
       <div className="flex flex-col md:flex-row items-center justify-between p-5 w-full">
-        <div className="border border-gray-400 p-4 rounded-md flex items-center">
+        <div className="border border-gray-400 p-4 rounded-xl flex items-center">
           <ComponentIcon className="mr-4 size-[45px]" />
 
           <h1 className="tracking-[0.2rem] text-[25px] font-[550]">
@@ -144,7 +156,7 @@ function Dashboard({
           </h1>
         </div>
 
-        <div className="border border-gray-400 p-4 rounded-md flex items-center">
+        <div className="border border-gray-400 p-4 rounded-xl flex items-center">
           <CompassIcon className="mr-4 size-[45px]"/>
 
           <Link href={homepage} className="capitalize hover:animate-pulse tracking-[0.2rem] text-[25px] font-[550]">
@@ -154,7 +166,7 @@ function Dashboard({
       </div>
 
       <div className="flex items-center flex-col md:flex-row justify-evenly p-5 w-full">
-        <div className="flex items-center border border-gray-400 p-4 rounded-md">
+        <div className="flex items-center border border-gray-400 p-4 rounded-xl">
           <Star className="mr-4 size-[45px]" />
 
           <h1 className="tracking-[0.2rem] text-[25px] font-[550]">
@@ -162,7 +174,7 @@ function Dashboard({
           </h1>
         </div>
 
-        <div className="flex items-center border border-gray-400 p-4 rounded-md">
+        <div className="flex items-center border border-gray-400 p-4 rounded-xl">
           <GitFork className="mr-4 size-[45px]" />
 
           <h1 className="tracking-[0.2rem] text-[25px] font-[550]">
@@ -170,7 +182,7 @@ function Dashboard({
           </h1>
         </div>
 
-        <div className="flex items-center border border-gray-400 p-4 rounded-md">
+        <div className="flex items-center border border-gray-400 p-4 rounded-xl">
           <UsersIcon className="mr-4 size-[45px]" />
 
           <h1 className="tracking-[0.2rem] text-[25px] font-[550]">
@@ -178,7 +190,7 @@ function Dashboard({
           </h1>
         </div>
 
-        <div className="flex items-center border border-gray-400 p-4 rounded-md">
+        <div className="flex items-center border border-gray-400 p-4 rounded-xl">
           <TagIcon className="mr-4 size-[45px]" />
 
           <h1 className="tracking-[0.2rem] text-[25px] font-[550] truncate max-w-[350px]">
@@ -186,7 +198,7 @@ function Dashboard({
           </h1>
         </div>
 
-        <div className="flex items-center border border-gray-400 p-4 rounded-md">
+        <div className="flex items-center border border-gray-400 p-4 rounded-xl">
           <CalendarDays className="mr-4 size-[45px]" />
 
           <h1 className="tracking-[0.2rem] text-[25px] font-[550]">
@@ -217,8 +229,10 @@ function Dashboard({
           </div>
         </div>
 
-        <div className="space-y-2 border border-gray-400 p-3 rounded-xl flex-[0.4]">
-          <h1 className="capitalize text-center tracking-[0.2rem] text-[25px] font-[550]">latest open PR's</h1>
+        <div className="space-y-2 border border-gray-400 p-3 rounded-xl flex-[0.5]">
+          <h1 className="capitalize text-center tracking-[0.2rem] text-[25px] font-[550]">
+            latest open PR's
+          </h1>
 
           <div className="space-y-2">
             {issues.map(item => (
@@ -226,7 +240,7 @@ function Dashboard({
                 <div className="flex items-center">
                   <GitPullRequestArrowIcon className="mr-2 size-[25px]"/>
                   
-                  <p className="tracking-[0.1rem] text-[15px] font-[550] ml-2 truncate max-w-[600px]">
+                  <p className="tracking-[0.1rem] text-[15px] font-[550] ml-2 truncate max-w-[750px]">
                     {item.issue}
                   </p>
                 </div>
@@ -243,7 +257,7 @@ function Dashboard({
       </div>
 
       <div className="flex items-center justify-evenly space-x-2 w-full">
-        <div className="border border-gray-400 p-4 rounded-md">
+        <div className="border border-gray-400 px-1 py-4 rounded-xl flex-[0.5]">
           <h1 className="text-center tracking-[0.2rem] text-[25px] font-[550] capitalize">
             Number of commits for last {commitsPerDay.length} days
           </h1>
@@ -263,7 +277,7 @@ function Dashboard({
           </ChartContainer>
         </div>
         
-        <div className="border border-gray-400 p-4 rounded-md">
+        <div className="border border-gray-400 p-4 rounded-xl flex-[0.5]">
           <h1 className="text-center tracking-[0.2rem] text-[25px] font-[550] capitalize">
             Top {topContributors.length} contributors
           </h1>
@@ -276,14 +290,37 @@ function Dashboard({
                 tickLine={false}
                 tickMargin={10}
                 axisLine={false}
+                tickFormatter={(value) => value.slice(0, 10)}
                 // angle={45}
-
               />
               <ChartTooltip content={<ChartTooltipContent />} />
               <Bar dataKey="commits" fill="var(--color-commits)" radius={4} />
             </BarChart>
           </ChartContainer>
         </div>
+      </div>
+
+      <div className="space-y-10 flex flex-col border border-gray-400 rounded-xl p-4 min-w-[50%] h-[30%]">
+        <h1 className="text-center tracking-[0.2rem] text-[25px] font-[550] capitalize">
+          Popularity of topic {repoName} for last {topicInterests.length} days
+        </h1>
+
+        <AreaChart
+          data={topicInterests}
+          index="date"
+          categories={['popularity']}
+          onValueChange={(v: EventProps) => setValue(v)}
+          // colors={["red"]}
+        />
+        
+        {/* <LineChart
+        data={topicInterests}
+        index="date"
+        categories={['popularity']}
+        colors={['red']}
+        onValueChange={(v: EventProps) => setValue(v)}
+      /> */}
+
       </div>
 
       <AlertDialog>

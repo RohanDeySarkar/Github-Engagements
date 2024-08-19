@@ -1,57 +1,105 @@
-
-from github import Github
-from github import Auth
-from firebase_admin import credentials
-from firebase_admin import firestore
-import config
-import firebase_admin
-
-auth = Auth.Token(config.token)
-g = Github(auth=auth)
-g.get_user().login
+from pytrends.request import TrendReq
+import pandas as pd
 
 
-repo_name = 'tensorflow/tensorflow'
 
-repo = g.get_repo(repo_name)
+repository = "Tensorflow"
 
-commits_data = []
-page = 0
-while page < 10:
-    curr_page = repo.get_commits().get_page(page)
-    for item in curr_page:
-        try:
-            commits_data.append({
-                "author" : item.author.login,
-                "date" : str(item.last_modified_datetime.date())
-            })
-        except:
-            continue
-    page += 1
+pytrends = TrendReq(hl='en-US', tz=360)
+kw_list = [repository]
+pytrends.build_payload(kw_list, cat=0, timeframe='today 1-m', geo='', gprop='')
 
+interest_over_time_df = pytrends.interest_over_time().reset_index()
+interest_over_time_df["da_te"] = interest_over_time_df["date"].apply(lambda x : x.strftime("%Y-%m-%d"))
+interest_over_time_df = interest_over_time_df.drop(["date", "isPartial"], axis=1)
+interest_over_time_list = interest_over_time_df.values.tolist()
 
-top_contributors = {}
-for data in commits_data:
-    author = data["author"]
-    if author not in top_contributors:
-        top_contributors[author] = 1
-    else:
-        top_contributors[author] += 1
-top_contributors = dict(sorted(top_contributors.items(), key=lambda item: item[1], reverse=True))
-
-top_contributors_list = []
-top_n_contributors = 10
-curr_count = 0
-for contributor in top_contributors:
-    if curr_count == top_n_contributors:
-        break
-    top_contributors_list.append({
-        "author" : contributor,
-        "commits" : top_contributors[contributor]
+topic_interest = []
+for item in interest_over_time_list:
+    topic_interest.append({
+        "popularity" : item[0],
+        "date" : item[1]
     })
-    curr_count += 1
+    
+print(topic_interest)
 
-print(top_contributors_list)
+# interest_by_region = pytrends.interest_by_region(resolution='COUNTRY', inc_low_vol=True, inc_geo_code=False)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+# from github import Github
+# from github import Auth
+# from firebase_admin import credentials
+# from firebase_admin import firestore
+# import config
+# import firebase_admin
+
+# auth = Auth.Token(config.token)
+# g = Github(auth=auth)
+# g.get_user().login
+
+
+# repo_name = 'tensorflow/tensorflow'
+
+# repo = g.get_repo(repo_name)
+
+
+
+# commits_data = []
+# page = 0
+# while page < 10:
+#     curr_page = repo.get_commits().get_page(page)
+#     for item in curr_page:
+#         try:
+#             commits_data.append({
+#                 "author" : item.author.login,
+#                 "date" : str(item.last_modified_datetime.date())
+#             })
+#         except:
+#             continue
+#     page += 1
+
+
+# top_contributors = {}
+# for data in commits_data:
+#     author = data["author"]
+#     if author not in top_contributors:
+#         top_contributors[author] = 1
+#     else:
+#         top_contributors[author] += 1
+# top_contributors = dict(sorted(top_contributors.items(), key=lambda item: item[1], reverse=True))
+
+# top_contributors_list = []
+# top_n_contributors = 10
+# curr_count = 0
+# for contributor in top_contributors:
+#     if curr_count == top_n_contributors:
+#         break
+#     top_contributors_list.append({
+#         "author" : contributor,
+#         "commits" : top_contributors[contributor]
+#     })
+#     curr_count += 1
+
+# print(top_contributors_list)
 
 # print(commits_data)
 

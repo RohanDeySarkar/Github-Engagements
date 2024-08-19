@@ -3,6 +3,8 @@ from github import Auth
 import config
 from flask import Flask, request, jsonify
 from flask_cors import CORS
+from pytrends.request import TrendReq
+import pandas as pd
 
 class GithubData:
     def __init__(self, token):
@@ -71,7 +73,7 @@ class GithubData:
             commits_data = []
             page = 0
             pages_to_fetch = 25
-            while page < 25:
+            while page < pages_to_fetch:
                 curr_page = repo.get_commits().get_page(page)
                 for item in curr_page:
                     try:
@@ -82,6 +84,7 @@ class GithubData:
                     except:
                         continue
                 page += 1
+            commits_data = commits_data[::-1]
 
             commits_per_day = {}
             for data in commits_data:
@@ -120,6 +123,23 @@ class GithubData:
                 })
                 curr_count += 1
 
+            # Google trends data(Interest Over Time)
+            pytrends = TrendReq(hl='en-US', tz=360)
+            kw_list = [repo.name]
+            pytrends.build_payload(kw_list, cat=0, timeframe='today 1-m', geo='', gprop='')
+
+            interest_over_time_df = pytrends.interest_over_time().reset_index()
+            interest_over_time_df["da_te"] = interest_over_time_df["date"].apply(lambda x : x.strftime("%Y-%m-%d"))
+            interest_over_time_df = interest_over_time_df.drop(["date", "isPartial"], axis=1)
+            interest_over_time_list = interest_over_time_df.values.tolist()
+
+            topic_interest = []
+            for item in interest_over_time_list:
+                topic_interest.append({
+                    "popularity" : item[0],
+                    "date" : item[1]
+                })
+
             temp_data = {
                 "repoName" : repo.name,
                 "description": repo.description,
@@ -134,7 +154,8 @@ class GithubData:
                 "contributors" : contributors,
                 "latest_release" : last_releases[0]["release"],
                 "commits_per_day" : commits_per_day_list,
-                "top_contributors" : top_contributors_list
+                "top_contributors" : top_contributors_list,
+                "topic_interest" : topic_interest
             }
             return temp_data
         except:
@@ -157,8 +178,7 @@ if __name__ == '__main__':
 
 
 
-# flask --app main --debum run
-
+# flask --app main --debug run
 
 
 
