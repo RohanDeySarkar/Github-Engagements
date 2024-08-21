@@ -6,7 +6,6 @@ import {
   AlertDialogAction,
   AlertDialogCancel,
   AlertDialogContent,
-  AlertDialogDescription,
   AlertDialogFooter,
   AlertDialogHeader,
   AlertDialogTitle,
@@ -146,7 +145,9 @@ function Dashboard({
         {repoName}
       </h1>
 
-      <div className="flex flex-col md:flex-row items-center justify-between p-5 w-full">
+      <div className="flex flex-col md:flex-row space-y-2 items-center justify-evenly p-5 w-full">
+        <div></div>
+
         <div className="border border-gray-400 p-4 rounded-xl flex items-center">
           <ComponentIcon className="mr-4 size-[45px]" />
 
@@ -164,8 +165,10 @@ function Dashboard({
         </div>
       </div>
 
-      <div className="flex items-center flex-col md:flex-row justify-evenly p-5 w-full">
-        <div className="flex items-center border border-gray-400 p-4 rounded-xl">
+      <div className="flex items-center flex-col md:flex-row justify-evenly p-5 w-full space-y-5">
+        <div></div>
+        
+        <div className="flex items-center border border-gray-400 p-4 rounded-xl min-w-[300px] justify-center">
           <Star className="mr-4 size-[45px]" />
 
           <h1 className="tracking-[0.2rem] text-[25px] font-[550]">
@@ -173,7 +176,7 @@ function Dashboard({
           </h1>
         </div>
 
-        <div className="flex items-center border border-gray-400 p-4 rounded-xl">
+        <div className="flex items-center border border-gray-400 p-4 rounded-xl min-w-[300px] justify-center">
           <GitFork className="mr-4 size-[45px]" />
 
           <h1 className="tracking-[0.2rem] text-[25px] font-[550]">
@@ -181,7 +184,7 @@ function Dashboard({
           </h1>
         </div>
 
-        <div className="flex items-center border border-gray-400 p-4 rounded-xl">
+        <div className="flex items-center border border-gray-400 p-4 rounded-xl min-w-[300px] justify-center">
           <UsersIcon className="mr-4 size-[45px]" />
 
           <h1 className="tracking-[0.2rem] text-[25px] font-[550]">
@@ -189,7 +192,7 @@ function Dashboard({
           </h1>
         </div>
 
-        <div className="flex items-center border border-gray-400 p-4 rounded-xl">
+        <div className="flex items-center border border-gray-400 p-4 rounded-xl min-w-[300px] justify-center">
           <TagIcon className="mr-4 size-[45px]" />
 
           <h1 className="tracking-[0.2rem] text-[25px] font-[550] truncate max-w-[350px]">
@@ -197,7 +200,7 @@ function Dashboard({
           </h1>
         </div>
 
-        <div className="flex items-center border border-gray-400 p-4 rounded-xl">
+        <div className="flex items-center border border-gray-400 p-4 rounded-xl min-w-[300px] justify-center">
           <CalendarDays className="mr-4 size-[45px]" />
 
           <h1 className="tracking-[0.2rem] text-[25px] font-[550]">
@@ -206,7 +209,9 @@ function Dashboard({
         </div>
       </div>
 
-      <div className="flex space-x-2 justify-evenly">
+      <div className="flex flex-col space-y-5 md:flex-row space-x-2 justify-evenly">
+        <div></div>
+        
         <div className="space-y-10 flex flex-col border border-gray-400 rounded-xl flex-[0.5] p-1">
           <h1 className="text-center tracking-[0.2rem] text-[25px] font-[550] mt-10">
             Languages Used
@@ -228,12 +233,12 @@ function Dashboard({
           </div>
         </div>
 
-        <div className="space-y-2 border border-gray-400 p-3 rounded-xl flex-[0.5]">
+        <div className="space-y-2 flex flex-col border border-gray-400 p-3 rounded-xl flex-[0.5] max-h-[600px] overflow-y-scroll">
           <h1 className="capitalize text-center tracking-[0.2rem] text-[25px] font-[550]">
             latest open PR's
           </h1>
 
-          <div className="space-y-2">
+          <div className="space-y-2 ">
             {issues.map(item => (
               <Link href={item.href} className="flex items-center justify-between odd:bg-gray-100 even:bg-gray-200 p-1 hover:opacity-60">
                 <div className="flex items-center">
@@ -255,7 +260,9 @@ function Dashboard({
         </div>
       </div>
 
-      <div className="flex items-center justify-evenly space-x-2 w-full">
+      <div className="flex flex-col md:flex-row space-y-5 items-center justify-evenly space-x-2 w-full">
+        <div></div>
+
         <div className="border border-gray-400 px-1 py-4 rounded-xl flex-[0.5]">
           <h1 className="text-center tracking-[0.2rem] text-[25px] font-[550] capitalize">
             Number of commits for last {commitsPerDay.length} days
@@ -321,11 +328,11 @@ function Dashboard({
             </AlertDialogTrigger>
             <AlertDialogContent>
               <AlertDialogHeader>
-                <AlertDialogTitle>Are you absolutely sure ?</AlertDialogTitle>
+                <AlertDialogTitle className="text-[30px]">Are you absolutely sure ?</AlertDialogTitle>
               </AlertDialogHeader>
               <AlertDialogFooter>
-                <AlertDialogCancel>Cancel</AlertDialogCancel>
-                <AlertDialogAction onClick={deleteRepo}>Continue</AlertDialogAction>
+                <AlertDialogCancel className="text-[20px]">Cancel</AlertDialogCancel>
+                <AlertDialogAction className="text-[20px]" onClick={deleteRepo}>Continue</AlertDialogAction>
               </AlertDialogFooter>
             </AlertDialogContent>
         </AlertDialog>

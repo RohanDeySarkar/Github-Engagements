@@ -49,7 +49,7 @@ function Sidebar() {
 
     // console.log(repos)
     const menuOptions = (
-        <>
+        <div className="">
             <NewDocumentButton />
             
             <div className="flex py-4 flex-col space-y-4">
@@ -78,11 +78,11 @@ function Sidebar() {
                     </>
                 )}
             </div>
-        </>
+        </div>
     )
 
   return (
-    <div className="p-2 md:p-5 bg-gray-200 relative min-w-[300px]">
+    <div className="p-2 md:p-5 bg-gray-200 relative min-w-[100px]">
         <div className="md:hidden">
             <Sheet>
                 <SheetTrigger>

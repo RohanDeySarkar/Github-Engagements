@@ -5,62 +5,64 @@ import pandas as pd
 
 repository = "Tensorflow"
 
-pytrends = TrendReq(hl='en-US', tz=360)
-kw_list = [repository]
-pytrends.build_payload(kw_list, cat=0, timeframe='today 1-m', geo='', gprop='')
+# pytrends = TrendReq(hl='en-US', tz=360)
+# kw_list = [repository]
+# pytrends.build_payload(kw_list, cat=0, timeframe='today 1-m', geo='', gprop='')
 
-interest_over_time_df = pytrends.interest_over_time().reset_index()
-interest_over_time_df["da_te"] = interest_over_time_df["date"].apply(lambda x : x.strftime("%Y-%m-%d"))
-interest_over_time_df = interest_over_time_df.drop(["date", "isPartial"], axis=1)
-interest_over_time_list = interest_over_time_df.values.tolist()
+# interest_over_time_df = pytrends.interest_over_time().reset_index()
+# interest_over_time_df["da_te"] = interest_over_time_df["date"].apply(lambda x : x.strftime("%Y-%m-%d"))
+# interest_over_time_df = interest_over_time_df.drop(["date", "isPartial"], axis=1)
+# interest_over_time_list = interest_over_time_df.values.tolist()
 
-topic_interest = []
-for item in interest_over_time_list:
-    topic_interest.append({
-        "popularity" : item[0],
-        "date" : item[1]
-    })
+# topic_interest = []
+# for item in interest_over_time_list:
+#     topic_interest.append({
+#         "popularity" : item[0],
+#         "date" : item[1]
+#     })
     
-print(topic_interest)
+# print(topic_interest)
 
 # interest_by_region = pytrends.interest_by_region(resolution='COUNTRY', inc_low_vol=True, inc_geo_code=False)
 
 
 
 
+from github import Github
+from github import Auth
+from firebase_admin import credentials
+from firebase_admin import firestore
+import config
+import firebase_admin
+
+auth = Auth.Token(config.token)
+g = Github(auth=auth)
+g.get_user().login
 
 
+repo_name = 'tensorflow/tensorflow'
 
+repo = g.get_repo(repo_name)
 
+count = 0
+n_latest = 30
+latest_open_issues = []
+open_issues = repo.get_issues(state='open')
+for issue in open_issues:
+    print(dir(issue))
+    print(issue.as_pull_request)
+    break
+    if count == n_latest:
+        count = 0
+        break
+    latest_open_issues.append({
+        "issue" : issue.title,
+        "user" : issue.user.login,
+        "href" : f'https://github.com/{repository}/pull/{issue.number}'
+    })
+    count += 1
 
-
-
-
-
-
-
-
-
-
-
-
-
-# from github import Github
-# from github import Auth
-# from firebase_admin import credentials
-# from firebase_admin import firestore
-# import config
-# import firebase_admin
-
-# auth = Auth.Token(config.token)
-# g = Github(auth=auth)
-# g.get_user().login
-
-
-# repo_name = 'tensorflow/tensorflow'
-
-# repo = g.get_repo(repo_name)
-
+print(latest_open_issues)
 
 
 # commits_data = []

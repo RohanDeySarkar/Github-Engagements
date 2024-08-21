@@ -21,7 +21,7 @@ class GithubData:
 
             # PR's
             count = 0
-            n_latest = 12
+            n_latest = 30
             latest_open_issues = []
             open_issues = repo.get_issues(state='open')
             for issue in open_issues:
