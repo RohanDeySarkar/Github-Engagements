@@ -1,10 +1,9 @@
 from github import Github
 from github import Auth
 import config
-from flask import Flask, request, jsonify
+from flask import Flask, request
 from flask_cors import CORS
 from pytrends.request import TrendReq
-import pandas as pd
 
 class GithubData:
     def __init__(self, token):
