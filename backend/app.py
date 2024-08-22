@@ -172,8 +172,8 @@ def get_repo_data():
     data = git_hub.get_data(query)
     return data
 
-if __name__ == '__main__':
-    app.run(debug=True)
+# if __name__ == '__main__':
+#     app.run(debug=True)
 
 
 
