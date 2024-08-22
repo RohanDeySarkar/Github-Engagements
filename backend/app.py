@@ -1,9 +1,9 @@
 from github import Github
 from github import Auth
-import config
 from flask import Flask, request
 from flask_cors import CORS
 from pytrends.request import TrendReq
+import os
 
 class GithubData:
     def __init__(self, token):
@@ -164,18 +164,26 @@ class GithubData:
 app = Flask(__name__)
 CORS(app)
 
+# dotenv.load_dotenv()
+
 @app.route('/reponame', methods=['POST'])
 def get_repo_data():
+    token = os.getenv('TOKEN')
     query = request.args.get('query')
-    git_hub = GithubData(config.token)
+    git_hub = GithubData(token)
     data = git_hub.get_data(query)
     return data
+
+@app.route('/', methods=['GET'])
+def hello():
+    token = os.getenv('TOKEN')
+    return token
 
 if __name__ == '__main__':
     app.run(debug=True)
 
 
-# flask --app main --debug run
+# flask --app app --debug run
 
 
 
