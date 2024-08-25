@@ -48,6 +48,13 @@ const chartConfig = {
   },
 } satisfies ChartConfig
 
+const chartConfigContributor = {
+  commits: {
+    label: "Commits",
+    color: "#b9b9b9",
+  },
+} satisfies ChartConfig
+
 
 interface Language {
   language: string;
@@ -288,7 +295,7 @@ function Dashboard({
             Top {topContributors.length} contributors
           </h1>
           
-          <ChartContainer config={chartConfig} className="min-h-[500px] w-full">
+          <ChartContainer config={chartConfigContributor} className="min-h-[500px] w-full">
             <BarChart accessibilityLayer data={topContributors}>
               <CartesianGrid vertical={false} />
               <XAxis

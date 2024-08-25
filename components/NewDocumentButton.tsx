@@ -30,8 +30,13 @@ function NewDocumentButton() {
   const handleCreateNewDocument = async() => {    
     setCreate(true)
     if (name.length > 2){
-      const { id } = await createNewDocument(name);
-      router.push(`/repo/${id}`);
+      try {
+        const { id } = await createNewDocument(name);
+        router.push(`/repo/${id}`);
+      } catch (err) {
+        alert("NOT A REPO!")
+        router.push(`/`);
+      }
     }
     setOpen(false);
     setName("");
