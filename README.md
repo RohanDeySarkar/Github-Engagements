@@ -1,4 +1,5 @@
-This is a management tool
+Users can input a GitHub repository name to generate a customized dashboard displaying key metrics, such as pull requests, contributors, commit history, and overall activity. 
+This application offers a valuable tool for developers and project managers to gain insights into repository health, identify areas for improvement, and make data-driven decisions
 
 ![](https://github.com/RohanDeySarkar/Github-Engagements/blob/master/demo1.PNG?raw=true)
 
